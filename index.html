@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free legal information assistant for Indian citizens - Get simplified legal guidance in your language">
+    <meta name="keywords" content="legal help India, Indian law, legal advice, consumer rights, employment law">
+    <title>India Legal Assistant - Free Legal Information for Citizens</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">⚖️</span>
+                    <h1>India Legal Assistant</h1>
+                </div>
+                <p class="tagline">Making legal knowledge accessible to every Indian citizen</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Privacy Banner -->
+    <div class="privacy-banner" id="privacyBanner">
+        <div class="container">
+            <div class="privacy-content">
+                <span class="privacy-icon">🔒</span>
+                <p><strong>Your Privacy Matters:</strong> No data is stored. No login required. All analysis happens in real-time.</p>
+                <button class="privacy-close" onclick="closeBanner()">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Introduction Section -->
+            <section class="intro-section">
+                <h2>Get Clear Legal Guidance in Simple Language</h2>
+                <p class="intro-text">
+                    Describe your legal issue below, and we'll explain it in simple terms, 
+                    suggest the laws that apply, and tell you what steps to take next.
+                </p>
+                
+                <!-- Quick Categories -->
+                <div class="quick-categories">
+                    <h3>Common Legal Issues:</h3>
+                    <div class="category-grid" id="categoryGrid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Form -->
+            <section class="form-section">
+                <form id="legalForm" class="legal-form">
+                    <div class="form-group">
+                        <label for="description">
+                            <span class="label-text">Describe Your Legal Issue *</span>
+                            <span class="label-hint">Be as detailed as possible (minimum 10 characters)</span>
+                        </label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            rows="6" 
+                            placeholder="Example: My employer fired me without any notice and hasn't paid my last month's salary. I worked there for 2 years. What can I do?"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span> characters
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">
+                                <span class="label-text">Your Location</span>
+                                <span class="label-hint">City or State in India</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="location" 
+                                name="location" 
+                                placeholder="e.g., Mumbai, Maharashtra"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profession">
+                                <span class="label-text">Your Profession (Optional)</span>
+                                <span class="label-hint">Helps personalize advice</span>
+                            </label>
+                            <select id="profession" name="profession">
+                                <option value="">Select profession</option>
+                                <option value="student">Student</option>
+                                <option value="private_employee">Private Employee</option>
+                                <option value="government_employee">Government Employee</option>
+                                <option value="business_owner">Business Owner</option>
+                                <option value="self_employed">Self Employed</option>
+                                <option value="homemaker">Homemaker</option>
+                                <option value="retired">Retired</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="language">
+                            <span class="label-text">Preferred Language</span>
+                        </label>
+                        <select id="language" name="language">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी (Hindi)</option>
+                            <option value="ta">தமிழ் (Tamil)</option>
+                            <option value="te">తెలుగు (Telugu)</option>
+                            <option value="bn">বাংলা (Bengali)</option>
+                            <option value="mr">मराठी (Marathi)</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <span class="btn-text">Get Legal Guidance</span>
+                        <span class="btn-loader" style="display: none;">⏳ Analyzing...</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>Your Legal Analysis</h2>
+                    <button class="btn-secondary" onclick="resetForm()">New Query</button>
+                </div>
+
+                <!-- Urgency Meter -->
+                <div class="urgency-meter" id="urgencyMeter">
+                    <h3>Urgency Level</h3>
+                    <div class="urgency-bar">
+                        <div class="urgency-indicator" id="urgencyIndicator"></div>
+                    </div>
+                    <p class="urgency-text" id="urgencyText"></p>
+                </div>
+
+                <!-- Issue Summary -->
+                <div class="result-card">
+                    <h3>📋 Issue Summary</h3>
+                    <div class="result-content">
+                        <p class="issue-category" id="issueCategory"></p>
+                        <p class="issue-description" id="issueDescription"></p>
+                        <p class="issue-timeline" id="issueTimeline"></p>
+                    </div>
+                </div>
+
+                <!-- Jurisdiction -->
+                <div class="result-card" id="jurisdictionCard">
+                    <h3>📍 Your Jurisdiction</h3>
+                    <div class="result-content" id="jurisdictionContent">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Applicable Laws -->
+                <div class="result-card">
+                    <h3>⚖️ Laws That Apply to Your Case</h3>
+                    <div class="result-content">
+                        <ul class="law-list" id="lawList">
+                            <!-- Populated by JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Action Steps -->
+                <div class="result-card highlight">
+                    <h3>✅ What You Should Do Next</h3>
+                    <div class="result-content">
+                        <ol class="step-list" id="stepList">
+                            <!-- Populated by JavaScript -->
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Required Documents -->
+                <div class="result-card">
+                    <h3>📄 Documents You'll Need</h3>
+                    <div class="result-content">
+                        <ul class="document-list" id="documentList">
+                            <!-- Populated by JavaScript -->
+                        </ul>
+                        <p class="document-tip">💡 <strong>Tip:</strong> Make photocopies of all documents and keep originals safe.</p>
+                    </div>
+                </div>
+
+                <!-- Profession Tip -->
+                <div class="result-card info-card" id="professionCard" style="display: none;">
+                    <h3>💼 Personalized Advice</h3>
+                    <div class="result-content">
+                        <p id="professionTip"></p>
+                    </div>
+                </div>
+
+                <!-- Disclaimer -->
+                <div class="disclaimer-box">
+                    <h4>⚠️ Important Disclaimer</h4>
+                    <p>
+                        This is general legal information only and should not be considered as legal advice. 
+                        Every case is unique. For specific guidance on your situation, please consult a qualified 
+                        lawyer or visit your nearest Legal Aid office.
+                    </p>
+                    <p>
+                        <strong>Free Legal Aid:</strong> Call <a href="tel:15100">15100</a> (National Legal Services Authority) 
+                        or visit <a href="https://nalsa.gov.in" target="_blank">nalsa.gov.in</a>
+                    </p>
+                </div>
+
+                <!-- Feedback Form -->
+                <div class="feedback-section">
+                    <h3>Was this helpful?</h3>
+                    <form id="feedbackForm" class="feedback-form">
+                        <div class="rating-group">
+                            <label>Rate this guidance:</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" required>
+                                <label for="star5">⭐</label>
+                                <input type="radio" id="star4" name="rating" value="4">
+                                <label for="star4">⭐</label>
+                                <input type="radio" id="star3" name="rating" value="3">
+                                <label for="star3">⭐</label>
+                                <input type="radio" id="star2" name="rating" value="2">
+                                <label for="star2">⭐</label>
+                                <input type="radio" id="star1" name="rating" value="1">
+                                <label for="star1">⭐</label>
+                            </div>
+                        </div>
+                        
+                        <div class="helpful-group">
+                            <label>
+                                <input type="checkbox" id="wasHelpful" name="wasHelpful">
+                                This information was helpful
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea 
+                                id="feedbackComment" 
+                                name="comment" 
+                                rows="3" 
+                                placeholder="Any suggestions? (optional)"
+                            ></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Submit Feedback</button>
+                    </form>
+                    <div class="feedback-success" id="feedbackSuccess" style="display: none;">
+                        <p>✅ Thank you for your feedback! It helps us improve.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About This Tool</h4>
+                    <p>India Legal Assistant provides free, simplified legal information to help Indian citizens understand their rights and legal options.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Important Resources</h4>
+                    <ul>
+                        <li><a href="https://nalsa.gov.in" target="_blank">National Legal Services Authority</a></li>
+                        <li><a href="https://districts.ecourts.gov.in" target="_blank">eCourts Services</a></li>
+                        <li><a href="https://cybercrime.gov.in" target="_blank">Cybercrime Portal</a></li>
+                        <li><a href="tel:15100">Legal Aid Helpline: 15100</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Privacy & Terms</h4>
+                    <p>🔒 No data stored<br>
+                    🚫 No login required<br>
+                    ✅ Completely free<br>
+                    🇮🇳 Made for India</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 India Legal Assistant. Educational purposes only. Not a substitute for legal advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

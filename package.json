@@ -1,0 +1,33 @@
+{
+  "name": "india-legal-assistant",
+  "version": "1.0.0",
+  "description": "AI-powered legal information assistant for Indian citizens - making legal knowledge accessible in simple language",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "legal",
+    "india",
+    "assistant",
+    "legal-tech",
+    "civic-tech",
+    "law",
+    "legal-information",
+    "access-to-justice"
+  ],
+  "author": "Your Team Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
