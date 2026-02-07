@@ -1,130 +1,104 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import multer from "multer";
-import fs from "fs";
-import pdf from "pdf-parse";
-import mammoth from "mammoth";
-import Tesseract from "tesseract.js";
+// server.js
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
-dotenv.config();
+// Import middleware
+const rateLimiter = require('./middlewares/rateLimiter');
+const errorHandler = require('./middlewares/errorHandler');
 
+// Import routes
+const legalRoutes = require('./routes/legalRoutes');
+
+// Initialize app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-/* ---------- MIDDLEWARE ---------- */
-app.use(cors());
-app.use(express.json());
+// ===== MIDDLEWARE =====
+// Security headers
 app.use(helmet());
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
-});
-app.use(limiter);
+// CORS - Allow frontend to access
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
 
-/* ---------- MULTER CONFIG ---------- */
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  }
-});
+// Body parsing
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-const upload = multer({ storage });
+// Logging
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
 
-/* ---------- ROUTES ---------- */
-app.get("/", (req, res) => {
-  res.send("LexScripta Backend is Running");
-});
+// Rate limiting
+app.use('/api/', rateLimiter);
 
-app.get("/api/health", (req, res) => {
-  res.json({
-    status: "healthy",
-    service: "LexScripta API"
+// ===== ROUTES =====
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'LexScripta API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    aiEnabled: !!(process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY)
   });
 });
 
-/* ---------- FILE UPLOAD API ---------- */
-app.post("/api/upload", upload.single("file"), async (req, res) => {
-  /* ---------- AI LEGAL Q&A (MOCK AI) ---------- */
-app.post("/api/ask", async (req, res) => {
-  try {
-    const { question, documentText } = req.body;
-
-    if (!question || !documentText) {
-      return res.status(400).json({ error: "Missing question or document text" });
-    }
-
-    // Mock AI response (hackathon-safe)
-    const answer = `
-Based on the uploaded document, here is a simplified legal explanation:
-
-Question:
-${question}
-
-Answer:
-This document appears to relate to Indian law. Based on the provided content, the issue should be evaluated under relevant statutes and legal principles. 
-For accurate legal advice, a qualified legal professional should be consulted.
-
-(This is an AI-generated response for educational purposes only.)
-`;
-
-    res.json({
-      success: true,
-      answer
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: "AI processing failed" });
-  }
+// Legal categories
+app.get('/api/categories', (req, res) => {
+  res.status(200).json({
+    success: true,
+    categories: [
+      { id: 'property', name: 'Property Law', icon: '🏠' },
+      { id: 'employment', name: 'Employment Law', icon: '💼' },
+      { id: 'consumer', name: 'Consumer Rights', icon: '🛒' },
+      { id: 'family', name: 'Family Law', icon: '👨‍👩‍👧‍👦' },
+      { id: 'criminal', name: 'Criminal Law', icon: '⚖️' },
+      { id: 'business', name: 'Business Law', icon: '🏢' },
+      { id: 'tax', name: 'Tax Law', icon: '💰' },
+      { id: 'intellectual', name: 'IP Rights', icon: '💡' }
+    ]
+  });
 });
 
-  try {
-    const filePath = req.file.path;
-    const fileType = req.file.mimetype;
+// Main legal routes
+app.use('/api/v1/legal', legalRoutes);
 
-    let extractedText = "";
-
-    // PDF
-    if (fileType === "application/pdf") {
-      const dataBuffer = fs.readFileSync(filePath);
-      const pdfData = await pdf(dataBuffer);
-      extractedText = pdfData.text;
-    }
-
-    // DOCX
-    else if (
-      fileType ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      const result = await mammoth.extractRawText({ path: filePath });
-      extractedText = result.value;
-    }
-
-    // IMAGE (OCR)
-    else if (fileType.startsWith("image/")) {
-      const result = await Tesseract.recognize(filePath, "eng");
-      extractedText = result.data.text;
-    }
-
-    else {
-      return res.status(400).json({ error: "Unsupported file type" });
-    }
-
-    res.json({
-      success: true,
-      text: extractedText.substring(0, 3000) // limit output
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: "File processing failed" });
-  }
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found'
+  });
 });
 
-/* ---------- START SERVER ---------- */
+// Error handler (must be last)
+app.use(errorHandler);
+
+// ===== START SERVER =====
 app.listen(PORT, () => {
-  console.log(`LexScripta Backend running on http://localhost:${PORT}`);
+  console.log(`
+╔════════════════════════════════════════════════╗
+║          LexScripta API Server                 ║
+║                                                ║
+║  Status: Running                               ║
+║  Port: ${PORT}                                    ║
+║  Environment: ${process.env.NODE_ENV || 'development'}                      ║
+║  AI Mode: ${!!(process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY) ? 'Real AI Enabled' : 'Mock Mode'}                ║
+║                                                ║
+╚════════════════════════════════════════════════╝
+  `);
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully...');
+  process.exit(0);
 });
