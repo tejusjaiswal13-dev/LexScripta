@@ -1,38 +1,12 @@
 # Dependencies
 node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
 package-lock.json
+yarn.lock
 
 # Environment variables
 .env
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Operating System
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Desktop.ini
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*.swn
-*~
-.project
-.settings/
-.classpath
+.env.production
 
 # Logs
 logs/
@@ -40,86 +14,26 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pids/
-*.pid
-*.seed
-*.pid.lock
 
-# Runtime data
-lib-cov/
-coverage/
-.nyc_output/
-.grunt/
-bower_components/
+# OS files
+.DS_Store
+Thumbs.db
 
-# Build outputs
-dist/
-build/
-out/
-.next/
-.nuxt/
-
-# Testing
-.cache/
-.pytest_cache/
-htmlcov/
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
 # Temporary files
 tmp/
 temp/
 *.tmp
 
-# Optional npm cache
-.npm
+# Uploaded files (if stored locally)
+uploads/
 
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# dotenv environment variable files
-.env*.local
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Stores VSCode versions used for testing
-.vscode-test
-
-# yarn v2
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
-.pnp.*
-
-# macOS
-.AppleDouble
-.LSOverride
-
-# Windows
-[Tt]humbs.db
-[Dd]esktop.ini
-$RECYCLE.BIN/
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-*.lnk
+# Build outputs
+dist/
+build/
