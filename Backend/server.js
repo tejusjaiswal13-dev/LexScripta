@@ -10,7 +10,8 @@ const rateLimiter = require('./middlewares/rateLimiter');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Import routes
-const legalRoutes = require('./Routes/legalRoutes');
+const legalRoutes = require('./routes/legalRoutes');
+
 
 // Initialize app
 const app = express();
