@@ -256,3 +256,5 @@ This is general information based on common Indian legal principles. Your specif
 }
 
 module.exports = new AIService();
+
+
