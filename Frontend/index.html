@@ -2,29 +2,192 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>LexScripta – Legal Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LexScripta - AI-powered Indian legal assistant for instant legal guidance" />
+  <meta name="keywords" content="legal assistant, Indian law, AI lawyer, legal advice India" />
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="LexScripta - Your AI Legal Assistant" />
+  <meta property="og:description" content="Get instant legal guidance based on Indian laws" />
+  <meta property="og:type" content="website" />
+  
+  <title>LexScripta – AI Legal Assistant for Indian Law</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <nav class="navbar">
+      <div class="logo">
+        <span class="logo-icon">⚖️</span>
+        <span class="logo-text">LexScripta</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+    </nav>
+    
+    <div class="hero-content">
+      <h1>Your AI Legal Assistant<br/>for Indian Law</h1>
+      <p class="hero-subtitle">Get instant, simplified legal guidance powered by AI. Upload documents, ask questions, understand your rights.</p>
+      <button class="cta-button" onclick="document.getElementById('main-app').scrollIntoView({behavior: 'smooth'})">
+        Get Started Free →
+      </button>
+    </div>
+  </header>
 
-  <div class="container">
-    <h1>LexScripta</h1>
-    <p class="subtitle">India Legal Assistant (MVP)</p>
+  <!-- Main Application -->
+  <main id="main-app" class="container">
+    <div class="app-card">
+      <!-- Steps indicator -->
+      <div class="steps">
+        <div class="step active" data-step="1">
+          <span class="step-number">1</span>
+          <span class="step-label">Upload Document</span>
+        </div>
+        <div class="step" data-step="2">
+          <span class="step-number">2</span>
+          <span class="step-label">Ask Question</span>
+        </div>
+        <div class="step" data-step="3">
+          <span class="step-number">3</span>
+          <span class="step-label">Get Guidance</span>
+        </div>
+      </div>
 
-    <hr />
+      <!-- Document Upload Section -->
+      <section class="upload-section">
+        <h2>📄 Upload Your Legal Document</h2>
+        <p class="section-desc">Supported: PDF, DOCX, DOC, JPG, PNG (Max 10MB)</p>
+        
+        <div class="file-upload-area" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png" hidden />
+          <label for="fileInput" class="file-upload-label">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span>Click to upload or drag and drop</span>
+            <span class="file-hint">PDF, DOCX, or Image files</span>
+          </label>
+        </div>
+        
+        <div id="filePreview" class="file-preview hidden"></div>
+        <button id="uploadBtn" class="btn-primary" disabled>
+          <span class="btn-text">Analyze Document</span>
+          <span class="btn-loader hidden">
+            <span class="spinner"></span> Processing...
+          </span>
+        </button>
+      </section>
 
-<h3>Upload Legal Document</h3>
+      <div class="divider">OR</div>
 
-<input type="file" id="fileInput" />
-<br /><br />
-<button id="uploadBtn">Upload File</button>
+      <!-- Question Section -->
+      <section class="question-section">
+        <h2>💬 Ask a Legal Question</h2>
+        <p class="section-desc">Get AI-powered legal guidance in simple language</p>
+        
+        <div class="question-examples">
+          <p>Try asking:</p>
+          <button class="example-chip" data-question="How do I register property in India?">Property registration</button>
+          <button class="example-chip" data-question="What are my rights if wrongfully terminated from job?">Wrongful termination</button>
+          <button class="example-chip" data-question="How to file a consumer complaint?">Consumer complaint</button>
+        </div>
+        
+        <textarea 
+          id="questionInput" 
+          placeholder="Type your legal question here... (e.g., 'What are the legal requirements for starting a business in India?')" 
+          rows="4"
+          maxlength="500"
+        ></textarea>
+        <div class="char-count">
+          <span id="charCount">0</span>/500 characters
+        </div>
+        
+        <button id="askBtn" class="btn-primary">
+          <span class="btn-text">Get AI Guidance</span>
+          <span class="btn-loader hidden">
+            <span class="spinner"></span> Analyzing...
+          </span>
+        </button>
+      </section>
 
+      <!-- Results Section -->
+      <section id="resultsSection" class="results-section hidden">
+        <div class="results-header">
+          <h2>📋 Legal Guidance</h2>
+          <button class="btn-secondary" id="clearBtn">Clear & Start Over</button>
+        </div>
+        
+        <div id="output" class="output-content"></div>
+        
+        <div class="disclaimer-box">
+          <strong>⚠️ Important Disclaimer:</strong>
+          <p>This is AI-generated legal information for educational purposes only. It is NOT professional legal advice. For specific legal matters, please consult a qualified lawyer licensed to practice in India.</p>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn-secondary" onclick="window.print()">🖨️ Print Guidance</button>
+          <button class="btn-secondary" id="copyBtn">📋 Copy to Clipboard</button>
+          <button class="btn-primary" id="findLawyerBtn">👨‍⚖️ Find a Lawyer</button>
+        </div>
+      </section>
+    </div>
 
-    <button id="healthBtn">Check Backend Health</button>
-    <button id="categoriesBtn">Load Legal Categories</button>
+    <!-- Features Section -->
+    <section id="features" class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure & Private</h3>
+        <p>Your documents and questions are processed securely and never stored permanently</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🇮🇳</div>
+        <h3>Indian Law Focused</h3>
+        <p>Specialized in Indian legal system with references to IPC, CrPC, and other acts</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant Analysis</h3>
+        <p>Get legal guidance in seconds, not days. Powered by advanced AI</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>Simple Language</h3>
+        <p>Complex legal jargon translated into plain, understandable English</p>
+      </div>
+    </section>
+  </main>
 
-    <div id="output"></div>
-  </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>LexScripta</h4>
+        <p>Making legal knowledge accessible to everyone in India</p>
+      </div>
+      <div class="footer-section">
+        <h4>Resources</h4>
+        <a href="#">Legal Categories</a>
+        <a href="#">FAQs</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Disclaimer</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 LexScripta. Not a law firm. AI-generated content for educational purposes only.</p>
+    </div>
+  </footer>
 
   <script src="script.js"></script>
 </body>

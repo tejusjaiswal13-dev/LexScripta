@@ -49,6 +49,39 @@ app.get("/api/health", (req, res) => {
 
 /* ---------- FILE UPLOAD API ---------- */
 app.post("/api/upload", upload.single("file"), async (req, res) => {
+  /* ---------- AI LEGAL Q&A (MOCK AI) ---------- */
+app.post("/api/ask", async (req, res) => {
+  try {
+    const { question, documentText } = req.body;
+
+    if (!question || !documentText) {
+      return res.status(400).json({ error: "Missing question or document text" });
+    }
+
+    // Mock AI response (hackathon-safe)
+    const answer = `
+Based on the uploaded document, here is a simplified legal explanation:
+
+Question:
+${question}
+
+Answer:
+This document appears to relate to Indian law. Based on the provided content, the issue should be evaluated under relevant statutes and legal principles. 
+For accurate legal advice, a qualified legal professional should be consulted.
+
+(This is an AI-generated response for educational purposes only.)
+`;
+
+    res.json({
+      success: true,
+      answer
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: "AI processing failed" });
+  }
+});
+
   try {
     const filePath = req.file.path;
     const fileType = req.file.mimetype;
