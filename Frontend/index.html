@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LexScripta - AI-powered Indian Legal Assistant for simplified legal guidance">
+    <title>LexScripta | Indian Legal Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 18V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 15H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="logo-text">LexScripta</span>
+            </div>
+            <nav class="nav">
+                <a href="#examples" class="nav-link">Examples</a>
+                <a href="https://github.com" target="_blank" class="nav-link">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title">AI-Powered Indian Legal Assistant</h1>
+            <p class="hero-subtitle">Get simplified legal guidance on Indian laws in seconds. Upload documents and ask questions in plain language.</p>
+            <div class="hero-badges">
+                <span class="badge">🇮🇳 Indian Laws</span>
+                <span class="badge">⚡ Instant Answers</span>
+                <span class="badge">📄 Document Analysis</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Input Section -->
+            <div class="card">
+                <h2 class="card-title">Ask Your Legal Question</h2>
+                
+                <form id="legalForm" class="legal-form">
+                    <!-- Question Input -->
+                    <div class="form-group">
+                        <label for="question" class="form-label">
+                            Your Question
+                            <span class="form-hint">Be specific for better results</span>
+                        </label>
+                        <textarea 
+                            id="question" 
+                            name="question" 
+                            class="form-input" 
+                            placeholder="E.g., What are the legal requirements for property registration in Maharashtra?"
+                            rows="4"
+                            required
+                        ></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span> / 2000 characters
+                        </div>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            Upload Document (Optional)
+                            <span class="form-hint">PDF, DOCX, JPG, PNG - Max 10MB</span>
+                        </label>
+                        <div class="file-upload-wrapper">
+                            <input 
+                                type="file" 
+                                id="fileInput" 
+                                name="file" 
+                                class="file-input"
+                                accept=".pdf,.docx,.doc,.jpg,.jpeg,.png"
+                            >
+                            <label for="fileInput" class="file-label">
+                                <svg class="file-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span class="file-text">Choose file or drag here</span>
+                            </label>
+                            <div id="fileName" class="file-name"></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span class="btn-text">Analyze Question</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state hidden">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Analyzing your question...</p>
+                <p class="loading-subtext">This may take a few seconds</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state hidden">
+                <div class="error-icon">⚠️</div>
+                <h3 class="error-title">Something went wrong</h3>
+                <p class="error-message" id="errorMessage"></p>
+                <button class="btn btn-secondary" onclick="hideError()">Try Again</button>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="results-section hidden">
+                <div class="card">
+                    <div class="result-header">
+                        <h2 class="card-title">Legal Analysis</h2>
+                        <span class="ai-badge" id="aiMode">AI Mode</span>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="result-question">
+                        <strong>Your Question:</strong>
+                        <p id="resultQuestion"></p>
+                    </div>
+
+                    <!-- Answer -->
+                    <div class="result-answer">
+                        <h3 class="section-title">Analysis</h3>
+                        <div id="resultAnswer" class="answer-content"></div>
+                    </div>
+
+                    <!-- Related Laws -->
+                    <div id="relatedLawsSection" class="result-laws hidden">
+                        <h3 class="section-title">Relevant Indian Laws</h3>
+                        <div id="relatedLaws" class="laws-list"></div>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <div class="result-disclaimer">
+                        <p id="resultDisclaimer"></p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="result-actions">
+                        <button class="btn btn-secondary" onclick="resetForm()">Ask Another Question</button>
+                        <button class="btn btn-outline" onclick="copyResponse()">Copy Response</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples Section -->
+            <div id="examples" class="examples-section">
+                <h2 class="section-heading">Example Questions</h2>
+                <p class="section-subheading">Click any example to try it out</p>
+                <div id="examplesList" class="examples-grid">
+                    <!-- Examples loaded via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                LexScripta © 2024 | AI-powered legal guidance for educational purposes
+            </p>
+            <p class="footer-disclaimer">
+                Not a substitute for professional legal advice. Always consult a qualified lawyer.
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
